@@ -1,0 +1,19 @@
+FROM python:3.10-slim
+
+# Устанавливаем рабочую директорию
+WORKDIR /app
+
+# Копируем зависимости
+COPY requirements.txt .
+
+# Устанавливаем зависимости
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Копируем папку с приложением
+COPY app/ ./app/
+
+# Копируем модель (в ту же папку, где её ищет main.py)
+COPY app/model.pt ./app/model.pt
+
+# Запускаем приложение
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
